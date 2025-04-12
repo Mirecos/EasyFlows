@@ -5,7 +5,7 @@ import { Entity, EntityWithId } from './types/Entity';
 import { DragMode } from './types/DragMode';
 import RightSidebar from './components/RightSidebar';
 import { Relation } from './types/Relations';
-import { getArrowCoordinatesFromPosition, getRelativePosition } from './utils';
+import { getRelationCoordinates, getRelativePosition } from './utils';
 
 function App() {
   // List of entities
@@ -391,13 +391,13 @@ function App() {
           if(fromEntity === undefined) return null
           const toEntity = relation.to === -1 ? null : entities.find((_, i) => i === relation.to)
           
-          const secondEntityPosition = relation.to === -1 ? {x: currentRelationDragX.current!, y: currentRelationDragY.current!} : {x: toEntity!.positionX + (toEntity!.baseStyle!.width / 2), y: toEntity!.positionY + (toEntity!.baseStyle!.height / 2)}
-          const relationPositions = getRelativePosition(fromEntity, secondEntityPosition)
-          
-          const fromX = fromEntity.positionX
-          const fromY = fromEntity.positionY
-          const toX = toEntity ? toEntity.positionX : currentRelationDragX.current
-          const toY = toEntity ? toEntity.positionY: currentRelationDragY.current
+          const coordinates = getRelationCoordinates(fromEntity, toEntity, {dragX: currentRelationDragX.current, dragY: currentRelationDragY.current })
+
+          const fromX = coordinates.fromX
+          const fromY = coordinates.fromY
+
+          const toX = coordinates.toX ? coordinates.toX : currentRelationDragX.current
+          const toY = coordinates.toX ? coordinates.toY: currentRelationDragY.current
       
 
           return (
